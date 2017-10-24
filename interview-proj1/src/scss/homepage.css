@@ -1,0 +1,45 @@
+.searchDiv {
+	/*border: 1px solid red;*/
+	max-width: 65px;
+	cursor: pointer; 
+	cursor: -moz-pointer;
+    cursor: -webkit-pointer;
+    padding-bottom: 5px;
+}
+
+.createList {
+ position: absolute;
+ left: 305px;
+ top: 56px;
+}
+.ListName {
+	position: static;
+	float: right;
+	/*display: inline;*/
+	white-space: nowrap;
+}
+.ListDisplay {
+	position: relative;
+	float: right;
+	display: inline;
+	padding-top: 40px;
+}
+h1 {
+display: inline-block;
+}
+
+#searchbox {
+  text-align:center;
+  border-width: 4px;
+  border-color: #364;
+  border-style: solid;
+  border-radius: 20px;  
+ }
+ #createList {
+ 	text-align:center;
+ 	border-radius: 20px;
+ 	border-width: 4px;
+ 	border-color: #364;
+  	border-style: solid;
+  	border-radius: 20px;  
+ }
