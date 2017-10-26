@@ -1,11 +1,15 @@
-import { ADD_Movie } from '../types';
+import { ADD_LIST } from '../types';
 
-export default function movies(state=[],action={}) {
+// const initialState = {
+// 	lists: {}
+// };
+
+export default (state=[],action={}) => {
 	switch(action.type) {
-		case ADD_Movie:
+		case ADD_LIST:
 			return [
 				...state,
-				 action.game
+				 action.list
 			];
 		default : return state;
 	}
