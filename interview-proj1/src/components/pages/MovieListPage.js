@@ -4,6 +4,7 @@ import { Button ,Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import filter from 'lodash/filter';
+// import remove from 'lodash/remove';
 import '../../scss/card.css';
 
 import { deleteMovie } from '../../actions/actions';
@@ -16,6 +17,7 @@ class MoviesListPage extends Component {
 		currentList: undefined,
 		movieCard: [],
 		listLength: 0,
+		ratingAvg: 0,
 		updater: this.props.list
 		};
  _handleKeyPress = (e) => {
@@ -41,17 +43,24 @@ class MoviesListPage extends Component {
 	 this.setState({menu: o})
 }//end componentDidUpdate
 	getData(i) {
-		let arr = [];
-		// console.log(this.state.cache[i].data[0])
+		let arr = [], arrRatings = [];
+		// console.log(this.state.cache[i].data)
 		for (let j=0; j<this.state.cache[i].data.length; j++) {
 		const movie = this.state.cache[i].data[j];
 		const { deleteMovie } = this.props;
 		let x = (<MovieCard deleteMovie={deleteMovie} 
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
+			arrRatings.push(this.state.cache[i].data[j].vote_average)
 		}		
+		const avg = arrRatings.reduce((sum, value) => sum + value, 0)/arrRatings.length;
+		let ratingAvg = avg.toFixed(1)
+		console.log(arrRatings)
+		console.log(avg)
+		console.log(avg.toFixed(1))
+
 		this.setState({ movieCard: arr, listLength: this.state.cache[i].data.length,
-		 currentList: i });
+		 currentList: i, ratingAvg: ratingAvg });
 	}
 	sortByName(e) {
 		const { currentList } = this.state;
@@ -69,7 +78,9 @@ class MoviesListPage extends Component {
     let arr = [];
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
-		let x = (<MovieCard movie={movie} key={movie.id} />)
+		const { deleteMovie } = this.props;
+		let x = (<MovieCard deleteMovie={deleteMovie} 
+			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
 		this.setState({ movieCard: arr});
@@ -91,7 +102,9 @@ class MoviesListPage extends Component {
     let arr = [];
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
-		let x = (<MovieCard movie={movie} key={movie.id} />)
+		const { deleteMovie } = this.props;
+		let x = (<MovieCard deleteMovie={deleteMovie} 
+			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
 		this.setState({ movieCard: arr});
@@ -108,7 +121,9 @@ class MoviesListPage extends Component {
 		for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = this.state.cache[currentList].data[j];
 		// console.log(movie)
-		let x = (<MovieCard movie={movie} key={movie.id} />)
+		const { deleteMovie } = this.props;
+		let x = (<MovieCard deleteMovie={deleteMovie} 
+			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}
 		alert('There are no movies in your list with this name');
@@ -124,32 +139,41 @@ class MoviesListPage extends Component {
 	let arr = [];
     for (let j=0; j<filteredList.length; j++) {
 		const movie = filteredList[j];
-		let x = (<MovieCard movie={movie} key={movie.id} />)
+		const { deleteMovie } = this.props;
+		let x = (<MovieCard deleteMovie={deleteMovie} 
+			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
 		this.setState({ movieCard: arr, listLength: arr.length}, () =>{
 			if (this.state.movieCard.length === 0) {return this.filterByName('');} 
 		});
 	} //end filterByName
-	removeItem(movieId) {
-    // console.log(this.state.cache)
-    const { currentList } = this.state;
 
-let filteredList = filter(this.state.cache[currentList].data, ['id', movieId]);
-console.log(filteredList)
- //    let arr = [];
-	// for (let j=0; j<this.state.cache[currentList].data.length; j++) {
-	// 	const movie = this.state.cache[currentList].data[j];
-	// 	const { deleteMovie } = this.props;
-	// 	let x = (<MovieCard deleteMovie={deleteMovie} 
-	// 		movie={movie} removeItem={this.removeItem} key={movie.id} />)
-	// 		arr.push(x)
-	// 	}		
-	// 	console.log(arr)
-	// 	this.setState({ movieCard: arr});
+	removeItem(movieId) {
+    const { currentList } = this.state;
+    // console.log(this.state.cache[currentList].data)
+    // console.log('movieId: ', movieId)
+let filterMovie = filter(this.state.cache[currentList].data, (o)=> {
+	 // console.log('o.id: ', Number(o.id))
+	 // console.log('o.movieId: ', o.movieId)
+	// console.log('truthy', Number(o.id) !== Number(o.movieId) )
+	return Number(o.id) !== Number(movieId)
+});
+console.log(filterMovie)
+    let arr = [];
+	for (let j=0; j<filterMovie.length; j++) {
+		const movie = filterMovie[j];
+		const { deleteMovie } = this.props;
+		let x = (<MovieCard deleteMovie={deleteMovie} 
+			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
+			arr.push(x)
+		}		
+		console.log(arr)
+		this.setState({ movieCard: arr, listLength: arr.length});
 	} // end removeItem
 	render() {		
 		// console.log(this.state.movieCard)
+		let r = (typeof this.state.currentList === 'undefined') ? (<div></div>) : (<h1>average rating of list rating:&nbsp;{this.state.ratingAvg}</h1>)
 		let showList = this.state.movieCard.map((Card,i) =>{
 			// console.log(Card)
 			return (
@@ -173,13 +197,12 @@ console.log(filteredList)
 
 		 	<input ref='find' onKeyPress={this._handleKeyPress}
 		 	 id="createList" placeholder="Search..." />		 
-		 	{/*<input className="ui primary button" type="button"
-		 	 onClick={() => this.createList('clicked')} id="space" value="Create List"/>*/}
-
 
 	    <div className="ui three cards">
 	    {showList}
 	    </div>
+	    &nbsp;
+			{r}
 			</div>
 			)
 	}

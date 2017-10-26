@@ -18,8 +18,8 @@ export default function MovieCard({ movie, deleteMovie, removeItem }){
 			<div className="header"><strong>Rating: </strong>{movie.vote_average}</div>
 			<div className="extra content">
 				<div className="ui two buttons">
-					{/*<Link to={`/movie/${movie._id}`} className="ui basic button green">Edit</Link>*/}
 					<div className="ui basic button red" onClick={() => {deleteMovie(movie.id); removeItem(movie.id); } }>Delete</div>
+					<div className="ui basic button green">Rate Movie</div>
 				</div>
 			</div>
 		</div>
