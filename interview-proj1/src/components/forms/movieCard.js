@@ -1,7 +1,8 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 // import { Link } from 'react-router-dom';
 
-export default function MovieCard({movie}){
+export default function MovieCard({ movie, deleteMovie, removeItem }){
 	let y = 'https://image.tmdb.org/t/p/w92'
 	// {y+`${cache.results[i].poster_path}`
 	return (
@@ -14,10 +15,11 @@ export default function MovieCard({movie}){
 			<div className="header">{movie.release_date}</div>
 			</div>
 			<div className="description"><i>{movie.overview}</i></div>
+			<div className="header"><strong>Rating: </strong>{movie.vote_average}</div>
 			<div className="extra content">
 				<div className="ui two buttons">
 					{/*<Link to={`/movie/${movie._id}`} className="ui basic button green">Edit</Link>*/}
-					{/*<div className="ui basic button red" onClick={() => deleteMovie(movie._id)}>Delete</div>*/}
+					<div className="ui basic button red" onClick={() => {deleteMovie(movie.id); removeItem(movie.id); } }>Delete</div>
 				</div>
 			</div>
 		</div>
@@ -25,7 +27,7 @@ export default function MovieCard({movie}){
 }
 
 // MovieCard.propTypes = {
-	// movie: React.PropTypes.object.isRequired//,
-	// deleteGame: React.PropTypes.func.isRequired
+// 	movie: React.PropTypes.object.isRequired,
+// 	deleteMovie: React.PropTypes.func.isRequired
 // }
 

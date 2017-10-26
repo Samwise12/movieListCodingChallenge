@@ -1,4 +1,4 @@
-import { ADD_LIST } from '../types';
+import { ADD_LIST, MOVIE_DELETE } from '../types';
 
 // const initialState = {
 // 	lists: {}
@@ -11,6 +11,12 @@ export default (state=[],action={}) => {
 				...state,
 				 action.list
 			];
+		case MOVIE_DELETE:
+			return [
+			...state,
+			action.movieId
+			]
+
 		default : return state;
 	}
 }

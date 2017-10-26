@@ -25,4 +25,29 @@ router.get('/', (req,res) => {
 	}).catch(err => res.status(500).json({ error: err }))
 })
 
+router.delete('/', (req, res) => {
+	console.log('req:',req.body.movieId)	
+	List.find({ 'data.id': req.body.movieId }, {_id: 1})
+		.then(getId => {
+			// console.log(getId[0]._id)
+		List.update(
+			{'_id': getId[0]._id},
+			{ $pull: { "data" : { "id": req.body.movieId } } }
+			)
+			.then(stuff => {
+			// console.log('stuff:',stuff)
+				return (res.json({success: 'success'}))
+		})
+			.catch(err => console.log('err:',err))			
+			})
+		.catch(err => console.log('err:',err));
+	/*List.remove({ 'data.id': req.body.movieId })
+		.then(stuff => {
+			// console.log('stuff:',stuff)
+			return (res.json({success: 'success'}))
+	})
+		.catch(err => console.log('err:',err))*/
+	// res.json({success: 'success'})
+})
+
 export default router;
