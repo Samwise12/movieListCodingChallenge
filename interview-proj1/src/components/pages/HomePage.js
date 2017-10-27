@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { Table, Image, Header, Button } from 'semantic-ui-react';
+import { Message, Table, Image, Header, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import '../../scss/homepage.css';
@@ -129,16 +129,19 @@ class App extends Component {
 		// return <input ref='movie' type='text' placeholder='Enter a movie title...' />		
 	}	
 	createList(e) {
-		console.log(this.state.listName)
+		// console.log(this.state.listName)
+
 		const { listName } = this.state;
 		axios.post('/api/lists', { listTitle: listName,data: this.props.listThis }).then(
 					(response) => {
 						console.log('response:',response)						
 					}
-					).catch(err => console.log(err))
+					).catch(err => 
+					this.setState({errors: err.response.data.errors})
+					/*console.log(err.response.data.errors)*/)
 	}
 	render(){
-		console.log(this.props.listThis)
+		// console.log(this.props.listThis)
 		const { errors, loading } = this.state;
 		// console.log(movieTitles);
 		if (this.state.searchIconDisplay) {						
@@ -152,7 +155,11 @@ class App extends Component {
 		// console.log('Table:', this.state.Table)
 		return(<div>
 		<form onChange={this.onChange} onSubmit={this.onSubmit}>
-		   {!!this.state.errors.global && <div className="ui negative message"><p>{this.state.errors.global}</p></div>}
+		{ errors.global && <Message negative> 
+					<Message.Header>Something went wrong</Message.Header>
+					<p>{errors.global}</p>
+					</Message>}		
+		   {/*!!this.state.errors.global && <div className="ui negative message"><p>{this.state.errors.global}</p></div>*/}
 		   <div>
 			<label>
 			<strong>Search Movies:</strong>

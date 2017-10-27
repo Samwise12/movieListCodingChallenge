@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button ,Dropdown } from 'semantic-ui-react';
+import { Modal, Header, Button, Dropdown } from 'semantic-ui-react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -9,6 +9,22 @@ import '../../scss/card.css';
 
 import { deleteMovie } from '../../actions/actions';
 import MovieCard from '../forms/movieCard';
+
+const modalRater = () => {
+	console.log('modal clicked');
+	return (
+  <Modal trigger={<Button>Show Modal</Button>}>
+    <Modal.Header>Select a Photo</Modal.Header>
+    {/*<Modal.Content image>*/}
+      {/*<Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' />*/}
+      <Modal.Description>
+        <Header>Default Profile Image</Header>
+        <p>We've found the following gravatar image associated with your e-mail address.</p>
+        <p>Is it okay to use this photo?</p>
+      </Modal.Description>
+    {/*</Modal.Content>*/}
+  </Modal>
+)}
 
 class MoviesListPage extends Component {
 	state = {
@@ -48,16 +64,13 @@ class MoviesListPage extends Component {
 		for (let j=0; j<this.state.cache[i].data.length; j++) {
 		const movie = this.state.cache[i].data[j];
 		const { deleteMovie } = this.props;
-		let x = (<MovieCard deleteMovie={deleteMovie} 
+		let x = (<MovieCard deleteMovie={deleteMovie} rateMovie={this.rateMovie.bind(this)}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 			arrRatings.push(this.state.cache[i].data[j].vote_average)
 		}		
 		const avg = arrRatings.reduce((sum, value) => sum + value, 0)/arrRatings.length;
 		let ratingAvg = avg.toFixed(1)
-		console.log(arrRatings)
-		console.log(avg)
-		console.log(avg.toFixed(1))
 
 		this.setState({ movieCard: arr, listLength: this.state.cache[i].data.length,
 		 currentList: i, ratingAvg: ratingAvg });
@@ -154,12 +167,9 @@ class MoviesListPage extends Component {
     // console.log(this.state.cache[currentList].data)
     // console.log('movieId: ', movieId)
 let filterMovie = filter(this.state.cache[currentList].data, (o)=> {
-	 // console.log('o.id: ', Number(o.id))
-	 // console.log('o.movieId: ', o.movieId)
-	// console.log('truthy', Number(o.id) !== Number(o.movieId) )
 	return Number(o.id) !== Number(movieId)
 });
-console.log(filterMovie)
+// console.log(filterMovie)
     let arr = [];
 	for (let j=0; j<filterMovie.length; j++) {
 		const movie = filterMovie[j];
@@ -168,9 +178,14 @@ console.log(filterMovie)
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
-		console.log(arr)
+		// console.log(arr)
 		this.setState({ movieCard: arr, listLength: arr.length});
 	} // end removeItem
+
+	rateMovie(e) {
+		console.log(e)
+		modalRater()
+	}
 	render() {		
 		// console.log(this.state.movieCard)
 		let r = (typeof this.state.currentList === 'undefined') ? (<div></div>) : (<h1>average rating of list rating:&nbsp;{this.state.ratingAvg}</h1>)

@@ -4,19 +4,28 @@ import List from '../models/List';
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
-	// console.log('req:',req.body)	
-	const { listTitle, data } = req.body;
-	// console.log(data)
-	const NewList = new List({
+
+router.post('/', (req, res) => {	
+
+const { listTitle, data } = req.body;
+const NewList = new List({
 		listTitle: listTitle,
 		data: data
-	})
-	// console.log(NewList)
-	// res.status(200).json({success: 'success'})
+	})	
+
+	List.findOne({ listTitle: listTitle})
+		.then(response => {
+			if(response){
+				console.log(response, ' ***already exists')
+				res.status(400).json({ errors: { global: "List name is already taken"}})
+			}
+				else (
 	NewList.save()
 		.then(NewList => res.json( NewList ))
-		.catch(err => res.status(500).json({ error: err }));
+		.catch(err => res.status(500).json({ error: err }))
+					)
+		})
+		.catch(err => err)		
 });
 
 router.get('/', (req,res) => {
