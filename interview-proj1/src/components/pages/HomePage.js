@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import '../../scss/homepage.css';
 
-import { addList } from '../../actions/actions';
+import { addList, removeList, removeMovie } from '../../actions/actions';
 import InlineError from '../messages/InlineError';
 
  const TableExampleCollapsing = (cache, props) => {//console.log('cache: ',cache.results) 	
@@ -134,14 +134,15 @@ class App extends Component {
 		const { listName } = this.state;
 		axios.post('/api/lists', { listTitle: listName,data: this.props.listThis }).then(
 					(response) => {
-						console.log('response:',response)						
+			this.props.removeList();
+			this.context.router.history.push('/MovieListPage')
 					}
 					).catch(err => 
 					this.setState({errors: err.response.data.errors})
 					/*console.log(err.response.data.errors)*/)
 	}
 	render(){
-		// console.log(this.props.listThis)
+		// console.log(this.props)
 		const { errors, loading } = this.state;
 		// console.log(movieTitles);
 		if (this.state.searchIconDisplay) {						
@@ -150,8 +151,11 @@ class App extends Component {
 			searchbox = <input autoFocus id="searchbox" ref='movie' type='text' placeholder='Enter a movie title...' />
 		}
 		let z = this.props.listThis.map((item,i) => {
-			return (<li key={Date.now()+i}>{item.title}</li>)//.toString()
-		})		
+			return (<li onClick={(e)=> {
+			// console.log(item)
+			this.props.removeMovie(item.id)
+			}}key={Date.now()+i}>{item.title}</li>)//.toString()
+		});		
 		// console.log('Table:', this.state.Table)
 		return(<div>
 		<form onChange={this.onChange} onSubmit={this.onSubmit}>
@@ -200,8 +204,14 @@ class App extends Component {
 }
 
 App.propTypes = {
+	removeMovie: PropTypes.func.isRequired,
+	removeList: PropTypes.func.isRequired,
 	addList: PropTypes.func.isRequired,
 	listThis: PropTypes.array.isRequired	
+}
+
+App.contextTypes = {
+	router: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
@@ -210,5 +220,5 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps, { addList })(App);
+export default connect(mapStateToProps, { addList, removeList, removeMovie })(App);
 

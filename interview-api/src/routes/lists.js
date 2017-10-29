@@ -44,6 +44,7 @@ const NewList = new List({
 List.find().then(response => {
 	if(response[0]){		
 	console.log('worked:',response[0].rating);	
+	NewList.rating = response[0].rating
 	}
 }).catch(err => console.log(err))
 
