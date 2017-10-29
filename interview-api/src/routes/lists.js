@@ -3,7 +3,35 @@ import express from 'express';
 import List from '../models/List';
 
 const router = express.Router();
-
+// db.lists.updateMany({'rating': {$elemMatch: { id: 140607 } } }, {$set:{'rating': { id : 14067,rating : 1 } } })
+//db.lists.update( {rating: {$elemMatch: { id: 11 } } }, {$set:{'rating': {'rating': 1} } })
+router.put('/', (req, res) => {	
+	const { rating, id, objKey } = req.body;
+	let q = "rating." + objKey.toString() + ".id",
+		u= "rating.0.rating"; //issue
+	// console.log(req.body)
+	List.findOne(
+	{rating: {$elemMatch: { id: id } } }
+	).then(response=>{
+		if(response) {
+			List.updateMany(
+				{}, 
+				{$set: { [u]: rating } }, (err, list) => {
+					if (err) {return err};
+					 // console.log(list)
+					res.send(list)
+				});
+		} else {
+	List.updateMany(
+	{},
+	{ $push: { rating: {id, rating} } }, (err, list) => {
+		if (err) {return err };
+		res.send(list)
+	});				
+		}	
+	});
+	// res.status(200).json({success: 'success'})
+});
 
 router.post('/', (req, res) => {	
 
@@ -13,6 +41,12 @@ const NewList = new List({
 		data: data
 	})	
 
+List.find().then(response => {
+	if(response[0]){		
+	console.log('worked:',response[0].rating);	
+	}
+}).catch(err => console.log(err))
+
 	List.findOne({ listTitle: listTitle})
 		.then(response => {
 			if(response){
@@ -21,12 +55,16 @@ const NewList = new List({
 			}
 				else (
 	NewList.save()
-		.then(NewList => res.json( NewList ))
+		.then(NewList => {
+			// console.log(NewList);
+			res.json( NewList )
+		})
 		.catch(err => res.status(500).json({ error: err }))
 					)
 		})
 		.catch(err => err)		
 });
+
 
 router.get('/', (req,res) => {
 	List.find().then(data => {
@@ -35,7 +73,7 @@ router.get('/', (req,res) => {
 })
 
 router.delete('/', (req, res) => {
-	console.log('req:',req.body.movieId)	
+	// console.log('req:',req.body.movieId)	
 	List.find({ 'data.id': req.body.movieId }, {_id: 1})
 		.then(getId => {
 			// console.log(getId[0]._id)

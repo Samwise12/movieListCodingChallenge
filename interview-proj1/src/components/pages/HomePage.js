@@ -150,7 +150,7 @@ class App extends Component {
 			searchbox = <input autoFocus id="searchbox" ref='movie' type='text' placeholder='Enter a movie title...' />
 		}
 		let z = this.props.listThis.map((item,i) => {
-			return (<li key={Date.now()+i}>{item.title.toString()}</li>)
+			return (<li key={Date.now()+i}>{item.title}</li>)//.toString()
 		})		
 		// console.log('Table:', this.state.Table)
 		return(<div>
