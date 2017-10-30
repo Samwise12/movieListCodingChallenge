@@ -12,6 +12,15 @@
  left: 305px;
  top: 56px;
 }
+.addToList{
+ position: absolute;
+ left: 825px;
+ /*left: 625px;*/
+ top: 54px;	
+ /*position: relative;
+ left: 625px;
+ top:-79px;*/
+}
 .ListName {
 	position: static;
 	float: right;
@@ -48,3 +57,17 @@ Table {
   	border-style: solid;
   	border-radius: 20px;  
  }
+#addToList{
+	/*border-radius: 20px;*/
+ 	border-width: 1px;
+ 	border-color: #364;
+  	border-style: solid;
+}
+#borderlessMenu {
+display: inline-flex;
+}
+.invisible {
+visibility: hidden;
+}
+
+

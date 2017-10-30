@@ -5,6 +5,24 @@ import List from '../models/List';
 const router = express.Router();
 // db.lists.updateMany({'rating': {$elemMatch: { id: 140607 } } }, {$set:{'rating': { id : 14067,rating : 1 } } })
 //db.lists.update( {rating: {$elemMatch: { id: 11 } } }, {$set:{'rating': {'rating': 1} } })
+
+router.put('/update', (req, res) => {	
+	console.log(req.body.data);
+	List.findOne(
+	{_id: req.body._id}	
+		).then(response =>{
+			// console.log('response:', response)
+			console.log(req.body.data)
+		if(response) {
+			List.update(
+				{_id: req.body._id},
+				{ $set: {data: req.body.data}}
+				).catch(err=> console.log(err))
+		};			
+		})
+	res.status(200).json({success: 'success'})
+})
+
 router.put('/', (req, res) => {	
 	const { rating, id, objKey } = req.body;
 	let q = "rating." + objKey.toString() + ".id",
@@ -43,7 +61,7 @@ const NewList = new List({
 
 List.find().then(response => {
 	if(response[0]){		
-	console.log('worked:',response[0].rating);	
+	// console.log('worked:',response[0].rating);	
 	NewList.rating = response[0].rating
 	}
 }).catch(err => console.log(err))

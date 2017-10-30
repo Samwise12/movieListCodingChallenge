@@ -317,7 +317,7 @@ var q = update(this.state.cache, {
            contentLabel="Edit Rating"
            onRequestClose={this.handleCloseModal.bind(this)}
         >
-    <Modal.Header>Select a Photo</Modal.Header>                
+    <Modal.Header><strong>Modal!!</strong></Modal.Header>                
     <Modal.Content image>
       <Image wrapped size='medium' src={y+this.state.modalPoster} />   
 
