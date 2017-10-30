@@ -17,8 +17,8 @@ export default (state=[],action={}) => {
 			return state.filter(item => item.id !== action.movieId);
 		case MOVIE_DELETE:
 			return [
-			...state,
-			action.movieId
+			// ...state,
+			// action.movieId
 			]
 
 		default : return state;
