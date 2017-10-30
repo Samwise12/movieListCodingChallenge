@@ -175,7 +175,7 @@ let arr = [], arrRatings = [];
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
 		const { deleteMovie } = this.props;
-		let x = (<MovieCard deleteMovie={deleteMovie} 
+		let x = (<MovieCard deleteMovie={deleteMovie} rateMovie={this.rateMovie.bind(this)}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
@@ -199,7 +199,7 @@ let arr = [], arrRatings = [];
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
 		const { deleteMovie } = this.props;
-		let x = (<MovieCard deleteMovie={deleteMovie} 
+		let x = (<MovieCard deleteMovie={deleteMovie} rateMovie={this.rateMovie.bind(this)}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
