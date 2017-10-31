@@ -234,7 +234,10 @@ const pRating = this.state.cache[currentList].rating;
 		
 		// console.log(this.state.cache[currentList].data)
 	
-	 let filteredList = filter(this.state.cache[currentList].data, ['title', e]);
+	 // let filteredList = filter(this.state.cache[currentList].data, ['title', e]);
+let filteredList = filter(this.state.cache[currentList].data, l=> {
+	return l.title.toLowerCase() === e.toLowerCase();	
+});	 
 
 	let arr = [];
 	const pRating = this.state.cache[currentList].rating;
