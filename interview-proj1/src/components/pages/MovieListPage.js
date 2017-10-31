@@ -140,7 +140,7 @@ let arr = [], arrRatings = [];
 }//end componentDidUpdate
 	getData(i) {
 		let arr = [], arrRatings = [];
-		console.log(this.state.cache)
+		// console.log(this.state.cache)
 		const pRating = this.state.cache[i].rating;
 		// console.log(this.state.cache[i].rating)
 		for (let j=0; j<this.state.cache[i].data.length; j++) {
@@ -172,10 +172,12 @@ let arr = [], arrRatings = [];
 });
 
     let arr = [];
+    const pRating = this.state.cache[currentList].rating;
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
 		const { deleteMovie } = this.props;
 		let x = (<MovieCard deleteMovie={deleteMovie} 
+			rateMovie={this.rateMovie.bind(this)} pRating={pRating}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
@@ -196,10 +198,12 @@ let arr = [], arrRatings = [];
 });
 	// console.log(sortedList)
     let arr = [];
+    const pRating = this.state.cache[currentList].rating;
     for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = sortedList[j];
 		const { deleteMovie } = this.props;
 		let x = (<MovieCard deleteMovie={deleteMovie} 
+			rateMovie={this.rateMovie.bind(this)} pRating={pRating}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
@@ -211,14 +215,14 @@ let arr = [], arrRatings = [];
 		if(typeof this.state.cache[currentList] === 'undefined'){
 			return;
 		}
-
 		if (e.length === 0) {
+const pRating = this.state.cache[currentList].rating;
 		let arr = [];
 		for (let j=0; j<this.state.cache[currentList].data.length; j++) {
 		const movie = this.state.cache[currentList].data[j];
 		// console.log(movie)
 		const { deleteMovie } = this.props;
-		let x = (<MovieCard deleteMovie={deleteMovie} 
+		let x = (<MovieCard deleteMovie={deleteMovie} pRating={pRating} rateMovie={this.rateMovie.bind(this)}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}
@@ -233,14 +237,16 @@ let arr = [], arrRatings = [];
 	 let filteredList = filter(this.state.cache[currentList].data, ['title', e]);
 
 	let arr = [];
+	const pRating = this.state.cache[currentList].rating;
+
     for (let j=0; j<filteredList.length; j++) {
 		const movie = filteredList[j];
 		const { deleteMovie } = this.props;
-		let x = (<MovieCard deleteMovie={deleteMovie} 
+		let x = (<MovieCard deleteMovie={deleteMovie} rateMovie={this.rateMovie.bind(this)} pRating={pRating}
 			movie={movie} removeItem={this.removeItem.bind(this)} key={movie.id} />)
 			arr.push(x)
 		}		
-		this.setState({ movieCard: arr, listLength: arr.length}, () =>{
+		this.setState({ movieCard: arr, listLength: arr.length, handle1: false}, () =>{
 			if (this.state.movieCard.length === 0) {return this.filterByName('');} 
 		});
 	} //end filterByName
